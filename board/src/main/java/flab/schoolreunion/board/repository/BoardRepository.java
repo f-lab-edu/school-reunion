@@ -9,13 +9,13 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
-    @Query("select new flab.schoolreunion.board.dto.board.BoardResponse(m.name, m.uuid, r.uuid, b.id, b.title, b.content)" +
+    @Query("select new flab.schoolreunion.board.dto.board.BoardResponse(m.name, m.id, r.id, b.id, b.title, b.content)" +
             " from Board b" +
             " join fetch Member m" +
             " join fetch Reunion r")
     public List<BoardResponse> findAllBoardResponse();
 
-    @Query("select new flab.schoolreunion.board.dto.board.BoardResponse(m.name, m.uuid, r.uuid, b.id, b.title, b.content)" +
+    @Query("select new flab.schoolreunion.board.dto.board.BoardResponse(m.name, m.id, r.id, b.id, b.title, b.content)" +
             " from Board b" +
             " join fetch Member m" +
             " join fetch Reunion r" +

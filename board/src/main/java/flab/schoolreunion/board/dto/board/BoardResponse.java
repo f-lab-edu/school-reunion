@@ -11,8 +11,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class BoardResponse {
     private String writerName;
-    private UUID writerUuid;
-    private UUID reunionUuid;
+    private Long writerId;
+    private Long reunionId;
     private Long boardId;
     private String title;
     private String content;

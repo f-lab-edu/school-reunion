@@ -1,9 +1,6 @@
 package flab.schoolreunion.board.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 import java.util.UUID;
 
@@ -13,7 +10,8 @@ import java.util.UUID;
 @Entity
 public class GradeYear {
     @Id
-    private UUID uuid = UUID.randomUUID();
+    @GeneratedValue
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private SchoolMember schoolMember;

@@ -8,8 +8,8 @@ import java.util.UUID;
 @Getter
 @Setter
 public class BoardRequest {
-    private UUID writerUuid;
-    private UUID reunionUuid;
+    private Long writerId;
+    private Long reunionId;
     private String title;
     private String content;
 }
