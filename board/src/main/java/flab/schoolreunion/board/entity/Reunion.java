@@ -1,6 +1,7 @@
 package flab.schoolreunion.board.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
@@ -14,7 +15,8 @@ import java.util.UUID;
 @Getter
 public class Reunion {
     @Id
-    private UUID uuid = UUID.randomUUID();
+    @GeneratedValue
+    private Long id;
 
     @ManyToOne
     private School school;

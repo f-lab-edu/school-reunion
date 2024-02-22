@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/post")
+@RequestMapping("/posts")
 public class BoardController {
     private final BoardService boardService;
 
@@ -17,7 +17,7 @@ public class BoardController {
         this.boardService = boardService;
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public List<BoardResponse> getAll(){
         return boardService.getAll();
     }

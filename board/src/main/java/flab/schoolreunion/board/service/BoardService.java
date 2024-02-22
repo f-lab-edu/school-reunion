@@ -55,8 +55,8 @@ public class BoardService {
 
     private Board boardRequestToBoard(BoardRequest dto) {
         return Board.builder()
-                .member(memberRepository.findById(dto.getWriterUuid()).orElseThrow())
-                .reunion(reunionRepository.findById(dto.getReunionUuid()).orElseThrow())
+                .member(memberRepository.findById(dto.getWriterId()).orElseThrow())
+                .reunion(reunionRepository.findById(dto.getReunionId()).orElseThrow())
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .build();
@@ -65,8 +65,8 @@ public class BoardService {
     private BoardResponse boardToBoardResponse(Board board){
         return new BoardResponse(
                 board.getMember().getName(),
-                board.getMember().getUuid(),
-                board.getReunion().getUuid(),
+                board.getMember().getId(),
+                board.getReunion().getId(),
                 board.getId(),board.getTitle(),
                 board.getContent());
     }
