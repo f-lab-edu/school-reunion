@@ -27,11 +27,11 @@ public class BoardService {
     }
 
     public List<BoardResponse> getAll() {
-        return boardRepository.findAllBoardResponse();
+        return boardRepository.findAll().stream().map(this::boardToBoardResponse).toList();
     }
 
     public BoardResponse getOne(Long id) {
-        return boardRepository.findOneBoardResponse(id);
+        return boardToBoardResponse(boardRepository.findById(id).orElseThrow());
     }
 
     @Transactional

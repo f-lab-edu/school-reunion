@@ -1,25 +1,26 @@
 package flab.schoolreunion.board.repository;
 
-import flab.schoolreunion.board.dto.board.BoardResponse;
 import flab.schoolreunion.board.entity.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
-    @Query("select new flab.schoolreunion.board.dto.board.BoardResponse(m.name, m.id, r.id, b.id, b.title, b.content)" +
+    @Query("select b" +
             " from Board b" +
-            " join fetch Member m" +
-            " join fetch Reunion r")
-    public List<BoardResponse> findAllBoardResponse();
+            " join fetch b.member" +
+            " join fetch b.reunion r" +
+            " join fetch r.school")
+    public List<Board> findAll();
 
-    @Query("select new flab.schoolreunion.board.dto.board.BoardResponse(m.name, m.id, r.id, b.id, b.title, b.content)" +
+    @Query("select b" +
             " from Board b" +
-            " join fetch Member m" +
-            " join fetch Reunion r" +
-            " where b.id=:id")
-    public BoardResponse findOneBoardResponse(@Param("id") Long id);
-
+            " join fetch b.member" +
+            " join fetch b.reunion r" +
+            " join fetch r.school" +
+            " where b.id = :id")
+    public Optional<Board> findById(@Param("id") Long id);
 }
