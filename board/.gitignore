@@ -37,4 +37,7 @@ out/
 .vscode/
 
 ### CI/CD script ###
-deploy_and_run.sh
+deploy/*
+
+### monitoring ###
+monitoring/*
