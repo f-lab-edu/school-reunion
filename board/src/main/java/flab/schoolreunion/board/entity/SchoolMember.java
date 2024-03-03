@@ -7,7 +7,7 @@ import java.util.UUID;
 @Entity
 public class SchoolMember {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
