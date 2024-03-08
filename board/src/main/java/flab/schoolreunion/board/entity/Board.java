@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Board {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

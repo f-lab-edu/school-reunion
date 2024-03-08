@@ -2,7 +2,6 @@ package flab.schoolreunion.board.entity;
 
 import jakarta.persistence.*;
 
-import java.util.UUID;
 
 /**
  * 해당 학년에 몇년도였는지
@@ -10,7 +9,7 @@ import java.util.UUID;
 @Entity
 public class GradeYear {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -1,12 +1,7 @@
 package flab.schoolreunion.board.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
-
-import java.util.UUID;
 
 /**
  * 동창회
@@ -15,7 +10,7 @@ import java.util.UUID;
 @Getter
 public class Reunion {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
