@@ -2,8 +2,11 @@ package flab.schoolreunion.board.controller;
 
 import flab.schoolreunion.board.dto.board.BoardRequest;
 import flab.schoolreunion.board.dto.board.BoardResponse;
+import flab.schoolreunion.board.dto.board.BoardSearchCondition;
 import flab.schoolreunion.board.dto.board.BoardUpdateRequest;
 import flab.schoolreunion.board.service.BoardService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +21,8 @@ public class BoardController {
     }
 
     @GetMapping("")
-    public List<BoardResponse> getAll(){
-        return boardService.getAll();
+    public Page<BoardResponse> search(BoardSearchCondition condition, Pageable pageable) {
+        return boardService.search(condition, pageable);
     }
 
     @GetMapping("/{id}")

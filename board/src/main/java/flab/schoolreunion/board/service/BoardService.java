@@ -2,11 +2,14 @@ package flab.schoolreunion.board.service;
 
 import flab.schoolreunion.board.dto.board.BoardRequest;
 import flab.schoolreunion.board.dto.board.BoardResponse;
+import flab.schoolreunion.board.dto.board.BoardSearchCondition;
 import flab.schoolreunion.board.dto.board.BoardUpdateRequest;
 import flab.schoolreunion.board.entity.Board;
 import flab.schoolreunion.board.repository.BoardRepository;
 import flab.schoolreunion.board.repository.MemberRepository;
 import flab.schoolreunion.board.repository.ReunionRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,8 +29,8 @@ public class BoardService {
         this.reunionRepository = reunionRepository;
     }
 
-    public List<BoardResponse> getAll() {
-        return boardRepository.findAll().stream().map(this::boardToBoardResponse).toList();
+    public Page<BoardResponse> search(BoardSearchCondition condition, Pageable pageable){
+        return boardRepository.search(condition, pageable).map(this::boardToBoardResponse);
     }
 
     public BoardResponse getOne(Long id) {
