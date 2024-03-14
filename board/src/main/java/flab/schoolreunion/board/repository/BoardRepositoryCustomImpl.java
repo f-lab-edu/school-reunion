@@ -45,11 +45,14 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
     private Predicate getWhereQuery(BoardSearchCondition condition) {
         BooleanExpression query = board.reunion.id.eq(condition.getReunionId());
-
-        switch (condition.getTarget()) {
-            case TITLE -> query = query.and(board.title.contains(condition.getKeyword()));
-            case CONTENT -> query = query.and(board.content.contains(condition.getKeyword()));
-            case USERNAME -> query = query.and(board.member.name.contains(condition.getKeyword()));
+        try {
+            switch (condition.getTarget()) {
+                case TITLE -> query = query.and(board.title.contains(condition.getKeyword()));
+                case CONTENT -> query = query.and(board.content.contains(condition.getKeyword()));
+                case USERNAME -> query = query.and(board.member.name.contains(condition.getKeyword()));
+            }
+        } catch (NullPointerException e) {
+            return query;
         }
 
         return query;
