@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3308/school_reunion
+    username: admin
+    password: admin
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        show_sql: true
+
+    defer-datasource-initialization: true
+
+jwt:
+  secret: 7J6E7Iuc7YKkMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkw
+  token-validity-in-seconds: 300
