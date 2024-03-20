@@ -16,6 +16,15 @@ spring:
 
     defer-datasource-initialization: true
 
+  sql:
+    init:
+      mode: always
+
+
+  config:
+    import:
+      - application-oauth2.yml
+
 jwt:
   secret: 7J6E7Iuc7YKkMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkw
   token-validity-in-seconds: 300

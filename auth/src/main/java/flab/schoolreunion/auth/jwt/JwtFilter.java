@@ -14,6 +14,7 @@ import java.io.IOException;
 
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
+    public static final String TOKEN_START_TEXT = "Bearer ";
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
     private final JwtTokenProvider jwtTokenProvider;
@@ -24,16 +25,20 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String jwt = resolveToken(request);
+
         String requestURI = request.getRequestURI();
+//        if (requestURI.startsWith("/auth")) {
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
+
+        String jwt = resolveToken(request);
 
         TokenValidState tokenValidState = jwtTokenProvider.validateToken(jwt);
 
         if (tokenValidState == TokenValidState.EXPIRED) {
-            log.info("JWT 토큰이 만료되었습니다. uri: {}", requestURI);
             response.getWriter().write("EXPIRED_TOKEN");
         } else if (tokenValidState == TokenValidState.INVALID) {
-            log.info("유효하지 않은 JWT 토큰입니다. uri: {}", requestURI);
             response.getWriter().write("INVALID_TOKEN");
         } else if (tokenValidState == TokenValidState.VALIDATED) {
             Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
@@ -45,8 +50,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_START_TEXT)) {
+            return bearerToken.substring(TOKEN_START_TEXT.length());
         }
         return null;
     }
