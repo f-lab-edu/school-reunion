@@ -4,6 +4,8 @@ import flab.schoolreunion.auth.jwt.JwtAccessDeniedHandler;
 import flab.schoolreunion.auth.jwt.JwtAuthenticationEntryPoint;
 import flab.schoolreunion.auth.jwt.JwtFilter;
 import flab.schoolreunion.auth.jwt.JwtTokenProvider;
+import flab.schoolreunion.auth.oauth2.CustomOAuth2UserService;
+import flab.schoolreunion.auth.oauth2.OAuth2SuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,11 +23,15 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtTokenProvider jwtTokenProvider;
+    private final CustomOAuth2UserService oAuth2UserService;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
-    public SecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, JwtAccessDeniedHandler jwtAccessDeniedHandler, JwtTokenProvider jwtTokenProvider) {
+    public SecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, JwtAccessDeniedHandler jwtAccessDeniedHandler, JwtTokenProvider jwtTokenProvider, CustomOAuth2UserService oAuth2UserService, OAuth2SuccessHandler oAuth2SuccessHandler) {
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.oAuth2UserService = oAuth2UserService;
+        this.oAuth2SuccessHandler = oAuth2SuccessHandler;
     }
 
     @Bean
@@ -48,6 +54,20 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry.requestMatchers("/auth/**").permitAll()
                                 .anyRequest().authenticated())
+
+                .oauth2Login(httpSecurityOAuth2LoginConfigurer ->
+                        httpSecurityOAuth2LoginConfigurer
+                                .authorizationEndpoint(authorizationEndpointConfig ->
+                                        authorizationEndpointConfig.baseUri("/auth/oauth2/authorize"))
+
+                                .redirectionEndpoint(redirectionEndpointConfig ->
+                                        redirectionEndpointConfig.baseUri("/auth/oauth2/code/*"))
+
+                                .userInfoEndpoint(userInfoEndpointConfig ->
+                                        userInfoEndpointConfig.userService(oAuth2UserService))
+
+                                .successHandler(oAuth2SuccessHandler)
+                )
 
                 .addFilterBefore(new JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 

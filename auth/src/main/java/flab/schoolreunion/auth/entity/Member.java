@@ -1,16 +1,29 @@
 package flab.schoolreunion.auth.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
     private String email;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "member_role",
+            joinColumns = @JoinColumn(name = "member_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
+    )
+    private List<Role> roles;
 }
