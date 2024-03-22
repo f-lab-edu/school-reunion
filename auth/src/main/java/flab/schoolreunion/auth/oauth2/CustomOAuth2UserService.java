@@ -14,10 +14,7 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -51,11 +48,23 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         var user = oAuth2Attribute.convertToMap();
         log.info("user : " + user);
 
-        Member member;
-        try {
-            member = memberRepository.findMemberByEmail(user.get("email").toString()).orElseThrow();
+        Member member = getOrRegisterMember(user);
 
-        } catch (NoSuchElementException e) {
+        return new DefaultOAuth2User(
+                Set.copyOf(member.getRoles().stream().map(role ->
+                        new SimpleGrantedAuthority(role.getRoleName())).collect(Collectors.toSet()))
+                , oAuth2Attribute.getAttributes()
+                , "email"
+        );
+    }
+
+    private Member getOrRegisterMember(Map<String, Object> user) {
+        Member member;
+        Optional<Member> memberOptional = memberRepository.findMemberByEmail(user.get("email").toString());
+
+        if (memberOptional.isPresent()) {
+            member = memberOptional.get();
+        } else {
             Role role = roleRepository.findRoleByRoleName("ROLE_USER").orElseThrow();
             List<Role> roles = new ArrayList<>();
             roles.add(role);
@@ -65,15 +74,9 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                     .email(user.get("email").toString())
                     .roles(roles)
                     .build();
-
-            memberRepository.save(member);
+            member = memberRepository.save(member);
         }
 
-        return new DefaultOAuth2User(
-                Set.copyOf(member.getRoles().stream().map(role ->
-                        new SimpleGrantedAuthority(role.getRoleName())).collect(Collectors.toSet()))
-                , oAuth2Attribute.getAttributes()
-                , "email"
-        );
+        return member;
     }
 }
