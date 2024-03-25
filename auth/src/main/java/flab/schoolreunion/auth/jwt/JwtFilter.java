@@ -15,7 +15,6 @@ import java.io.IOException;
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
     public static final String TOKEN_START_TEXT = "Bearer ";
-
     public static final String AUTHORIZATION_HEADER = "Authorization";
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -30,11 +29,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String jwt = resolveToken(request);
 
+
         TokenValidState tokenValidState = jwtTokenProvider.validateToken(jwt);
 
         if (tokenValidState == TokenValidState.EXPIRED) {
             response.getWriter().write("EXPIRED_TOKEN");
         } else if (tokenValidState == TokenValidState.INVALID) {
+            jwtTokenProvider.deleteRefreshToken();
             response.getWriter().write("INVALID_TOKEN");
         } else if (tokenValidState == TokenValidState.VALIDATED) {
             Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
@@ -51,4 +52,6 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         return null;
     }
+
+
 }
