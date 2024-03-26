@@ -20,6 +20,11 @@ spring:
     init:
       mode: always
 
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
 
   config:
     import:
@@ -28,3 +33,4 @@ spring:
 jwt:
   secret: 7J6E7Iuc7YKkMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkw
   token-validity-in-seconds: 300
+  refresh-token-validity-in-days: 7
