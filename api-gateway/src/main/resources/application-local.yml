@@ -1,0 +1,25 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: posts
+          uri: http://localhost:8000
+          predicates:
+            - Path=/posts/**
+          filters:
+            - name: JwtAuthentication
+
+        - id: auth
+          uri: http://localhost:8010
+          predicates:
+            - Path=/auth
+
+        - id: member
+          uri: http://localhost:8010/member
+          predicates:
+            - Path=/**
+          filters:
+            - name: JwtAuthentication
+
+jwt:
+  secret: 7J6E7Iuc7YKkMTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkw
